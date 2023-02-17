@@ -29,9 +29,9 @@ library
                      , vector >= 0.12.3.1
                      , matrix >= 0.3.6.1
                      , array >= 0.5.4.0
-                     , extra >= 1.7.12
-                     , split >= 0.2.3.5
-                     , linear >= 1.21.10
+                     , extra >= 1.7.9
+                     , split >= 0.2.3.4
+                     , linear >= 1.21.6
                      , containers >= 0.6.4.1
   default-language:    Haskell2010
   ghc-options:         -Wall
