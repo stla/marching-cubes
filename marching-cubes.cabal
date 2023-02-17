@@ -1,7 +1,7 @@
 name:                marching-cubes
 version:             0.1.0.0
--- synopsis:
--- description:
+synopsis:            Marching Cubes
+description:         Pure Haskell implementation of the marching cubes algorithm
 homepage:            https://github.com/stla/marching-cubes#readme
 license:             BSD3
 license-file:        LICENSE
@@ -26,13 +26,13 @@ library
                      , FlexibleContexts
                      , TupleSections
   build-depends:       base >= 4.7 && < 5
-                     , matrix
-                     , vector
-                     , array
-                     , extra
-                     , split
-                     , linear
-                     , containers
+                     , vector >= 0.12.3.1
+                     , matrix >= 0.3.6.1
+                     , array >= 0.5.4.0
+                     , extra >= 1.7.12
+                     , split >= 0.2.3.5
+                     , linear >= 1.21.10
+                     , containers >= 0.6.4.1
   default-language:    Haskell2010
   ghc-options:         -Wall
                        -Wcompat
