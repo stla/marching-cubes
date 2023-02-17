@@ -1,0 +1,49 @@
+name:                marching-cubes
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/stla/marching-cubes#readme
+license:             BSD3
+license-file:        LICENSE
+author:              Stéphane Laurent
+maintainer:          laurent_step@outlook.fr
+copyright:           2023 Stéphane Laurent
+category:            Computational geometry
+build-type:          Simple
+extra-source-files:  README.md
+                     CHANGELOG.md
+cabal-version:       >=1.10
+
+library
+  hs-source-dirs:      src
+  exposed-modules:     MarchingCubes
+  other-modules:       MarchingCubes.Utils
+                     , MarchingCubes.Tables
+                     , MarchingCubes.Internal
+                     , MarchingCubes.MarchingCubes
+                     , MarchingCubes.Mesh
+  other-extensions:    BangPatterns
+                     , FlexibleContexts
+                     , TupleSections
+  build-depends:       base >= 4.7 && < 5
+                     , matrix
+                     , vector
+                     , array
+                     , extra
+                     , split
+                     , linear
+                     , containers
+  default-language:    Haskell2010
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-record-updates
+                       -Wincomplete-uni-patterns
+                       -Wmissing-export-lists
+                       -Wmissing-home-modules
+                       -Wpartial-fields
+                       -Wredundant-constraints
+
+source-repository head
+  type:     git
+  location: https://github.com/stla/marching-cubes
