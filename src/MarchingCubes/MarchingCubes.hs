@@ -139,7 +139,7 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
     p13     = UV.map (\i -> 8 * i + 1) (UV.enumFromN 0 nR3)
     cases3  = [ vt V.! (r3 ! i) - 1 | i <- [0 .. nR3 - 1] ]
     nedge   = specialNedge ! c
-    faces3  = UV.concat $ map ((V.!) facesTable) cases3
+    faces3  = UV.concat $ map (facesTable V.!) cases3
     index3  = case c of
       0 -> facesNo7 faces3 p13 values3 nR3 1
       1 -> faces7 faces3 p13 values3 nR3 1
@@ -155,7 +155,7 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
         = let facej = jthColumn faces3 nface j
           in  let temp = facesNo7 facej p13 values3 nR3 (j + 1)
               in  loop (j + 1) (zipWith (+) idx temp)
-    edges3'      = UV.toList $ UV.concat $ map ((V.!) edgesTable2) cases3
+    edges3'      = UV.toList $ UV.concat $ map (edgesTable2 V.!) cases3
     edges3       = vector2matrix edges3' nedge
     edgesp1index = cbind edges3 (UV.toList p13) index3
     ind3         = specialInd V.! c

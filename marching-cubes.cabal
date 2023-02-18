@@ -1,7 +1,7 @@
 name:                marching-cubes
 version:             0.1.0.0
 synopsis:            Marching Cubes
-description:         Pure Haskell implementation of the marching cubes algorithm
+description:         Pure Haskell implementation of the marching cubes algorithm.
 homepage:            https://github.com/stla/marching-cubes#readme
 license:             BSD3
 license-file:        LICENSE
