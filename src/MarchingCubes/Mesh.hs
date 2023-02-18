@@ -2,7 +2,7 @@
 {-# LANGUAGE TupleSections    #-}
 module MarchingCubes.Mesh
   ( makeMesh
-  , Mesh
+  , Mesh (..)
   ) where
 import           Data.Array.Unboxed             ( IArray
                                                 , UArray
@@ -41,7 +41,15 @@ import           MarchingCubes.MarchingCubes    ( Voxel
                                                 , marchingCubes
                                                 )
 
-type Mesh a = ((Vector (a, a, a), [[Int]]), Vector (a, a, a))
+-- type Mesh a = ((Vector (a, a, a), [[Int]]), Vector (a, a, a))
+
+data Mesh a = Mesh 
+  { 
+    _vertices :: Vector (a, a, a)
+  , _faces :: [(Int, Int, Int)] 
+  , _normals :: Vector (a, a, a)
+  } 
+  deriving Show
 
 matrix2listOfTriples :: Matrix a -> [(a, a, a)]
 matrix2listOfTriples mtrx =
@@ -100,12 +108,17 @@ makeMesh ::
   (Unbox a, RealFloat a, IArray UArray a) 
   => Voxel a -- ^ voxel obtained with `makeVoxel`
   -> a       -- ^ isovalue
-  -> Mesh a  -- ^ the mesh: ((vertices, faces), normals)
-makeMesh voxel level = (mesh, normals mesh)
+  -> Mesh a
+makeMesh voxel level = Mesh 
+  {
+    _vertices = vertices', _faces = faces''', _normals = normals mesh
+  }
  where
   mtrx                = marchingCubes voxel level
   vertices            = matrix2listOfTriples mtrx
   faces               = chunksOf 3 [0 .. nrows mtrx - 1]
   (vertices', faces') = undupMesh (vertices, faces)
   faces''             = filter (not . degenerateFace vertices') faces'
+  faces'''            = map toTriplet faces''
   mesh                = (vertices', faces'')
+  toTriplet ikj       = (ikj !! 0, ikj !! 2, ikj !! 1)

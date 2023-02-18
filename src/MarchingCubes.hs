@@ -7,6 +7,6 @@ import           MarchingCubes.MarchingCubes   as X
                                                 , makeVoxel
                                                 )
 import           MarchingCubes.Mesh            as X
-                                                ( Mesh
+                                                ( Mesh (..)
                                                 , makeMesh
                                                 )
