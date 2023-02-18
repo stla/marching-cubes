@@ -65,11 +65,12 @@ type Dims = (Int, Int, Int)
 type Voxel a = ((UArray Dims a, a), (Bounds a, Dims))
 type XYZ a = (a, a, a)
 
+-- | Make the voxel. 
 makeVoxel
   :: (RealFloat a, IArray UArray a)
-  => (XYZ a -> a)
-  -> Bounds a
-  -> Dims
+  => (XYZ a -> a) -- ^ the function defining the isosurface
+  -> Bounds a     -- ^ bounds of the grid
+  -> Dims         -- ^ numbers of subdivisions of the grid
   -> Voxel a
 makeVoxel fun bds@((xm, xM), (ym, yM), (zm, zM)) dims@(nx, ny, nz) =
   ((listArray ((0, 0, 0), (nx - 1, ny - 1, nz - 1)) values, mxmm), (bds, dims))
@@ -100,7 +101,6 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
   bds
   dims
  where
-  -- (_, (nx',ny',nz')) = bounds voxel
   ijkt         = levCells voxel level mx
   vt           = getRow 4 ijkt
   tcase        = getTcase vt
@@ -111,7 +111,6 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
   cubeco       = getBasic1 r vivjvk
   values       = getBasic2 voxel level cubeco
   p1           = [ 8 * i + 1 | i <- [0 .. nR - 1] ]
---  p1 = UV.map (\i -> 8*i + 1) UV.enumFromN 0 nR
   cases        = UV.map (\j -> vt V.! j - 1) r
   edgeslengths = UV.map (edgesLengths UV.!) cases
   p1rep        = F.toList $ replicateEach p1 (UV.toList edgeslengths)
@@ -137,9 +136,7 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
     nR3     = UV.length r3
     cubeco3 = getBasic1 r3 vivjvk
     values3 = getBasic2 voxel level cubeco3
---    p13 = [8*i + 1 | i <- [0 .. UV.length r3 - 1]]
     p13     = UV.map (\i -> 8 * i + 1) (UV.enumFromN 0 nR3)
---    cases3 = UV.map (\j -> vt V.! j - 1) r3
     cases3  = [ vt V.! (r3 ! i) - 1 | i <- [0 .. nR3 - 1] ]
     nedge   = specialNedge ! c
     faces3  = UV.concat $ map ((V.!) facesTable) cases3
@@ -161,7 +158,6 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
     edges3'      = UV.toList $ UV.concat $ map ((V.!) edgesTable2) cases3
     edges3       = vector2matrix edges3' nedge
     edgesp1index = cbind edges3 (UV.toList p13) index3
---    ind3Size = specialIndSizes V.! c
     ind3         = specialInd V.! c
     newtriangles = mapMaybe f [0 .. UV.length ind3 - 1]
     f j = triangles3
@@ -181,25 +177,3 @@ marchingCubes ((voxel, mx), (bds, dims)) level = rescaleMatrix
   triangles2 = if null setOfTriangles
     then Nothing
     else Just $ foldl1 (<->) setOfTriangles
-
--- ftest :: (Double,Double,Double) -> Double
--- ftest (x,y,z) = x*x + y*y + z*z - 1
---
--- voxel :: Voxel Double
--- voxel = makeVoxel ftest ((-1,1),(-1,1),(-1,1)) (5,5,5)
---
--- mc :: Matrix Double
--- mc = marchingCubes voxel 0
---
--- fEgg :: (Double,Double,Double) -> Double
--- fEgg (x,y,z) =
---   - sq(cos x * sin y + cos y * sin z + cos z * sin x) +
---     0.05-exp(100.0*(x*x/64+y*y/64 + z*z/(1.6*64)*exp(-0.4*z/8) - 1))
---   where
---   sq a = a*a
---
--- voxel' :: Voxel Double
--- voxel' = makeVoxel fEgg ((-7.6,7.6),(-7.6,7.6),(-8,14)) (5, 5, 5)
---
--- mc' :: Matrix Double
--- mc' = marchingCubes voxel' 0

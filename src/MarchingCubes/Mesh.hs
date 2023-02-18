@@ -95,7 +95,12 @@ degenerateFace vertices face = v1 == v2 || v1 == v3 || v2 == v3
   v2 = vertices ! (face !! 1)
   v3 = vertices ! (face !! 2)
 
-makeMesh :: (Unbox a, RealFloat a, IArray UArray a) => Voxel a -> a -> Mesh a
+-- | Make mesh of isosurface.
+makeMesh :: 
+  (Unbox a, RealFloat a, IArray UArray a) 
+  => Voxel a -- ^ voxel obtained with `makeVoxel`
+  -> a       -- ^ isovalue
+  -> Mesh a  -- ^ the mesh: ((vertices, faces), normals)
 makeMesh voxel level = (mesh, normals mesh)
  where
   mtrx                = marchingCubes voxel level
