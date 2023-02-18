@@ -191,20 +191,13 @@ getR tcase = UV.fromList $ F.toList $ go 0 S.empty
     | i == n
     = out
     | otherwise
-    = if tc
-         == 1
-         || tc
-         == 2
-         || tc
-         == 5
-         || tc
-         == 8
-         || tc
-         == 9
-         || tc
-         == 11
-         || tc
-         == 14
+    = if tc == 1
+      || tc == 2
+      || tc == 5
+      || tc == 8
+      || tc == 9
+      || tc == 11
+      || tc == 14
       then
         go (i + 1) (out |> i)
       else
